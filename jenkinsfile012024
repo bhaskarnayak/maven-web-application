@@ -4,7 +4,8 @@ echo"the node name is :${env.NODE_NAME}"
 echo"the job name is :${env.JOB_NAME}"
 echo"the build number is :${env.BUILD_NUMBER}"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '7', daysToKeepStr: '', numToKeepStr: '6')), [$class: 'JobLocalConfiguration', changeReasonComment: '']])
-    //checkout stage
+properties([[$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+//checkout stage
     stage('checkoutcode'){
        git branch: 'development', url: 'https://github.com/bhaskarnayak/maven-web-application.git'
     }
