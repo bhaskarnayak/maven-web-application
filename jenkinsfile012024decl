@@ -1,0 +1,42 @@
+pipeline{
+    agent any
+    tools{
+        maven "maven3.9.6"
+    }
+    
+    stages{
+        //get the code from git repo
+        stage('checkoutcode'){
+            steps{
+                git branch: 'development', url: 'https://github.com/bhaskarnayak/maven-web-application.git'
+            }
+        }
+        //do the build
+        stage('build'){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+            //generate sonarqube report
+            stage('sonarqube report'){
+                steps{
+                    sh "mvn sonar:sonar"
+                }
+            }
+            //upload artifact to nexus
+            stage('upload to artifact'){
+                steps{
+                    sh "mvn deploy"
+                }
+            }
+            //deploy to tomcat
+            stage('upload to tomcat'){
+                steps{
+                     sshagent(['c7287eb2-801c-4ee2-bfea-653f7cd9feee']) {
+    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@54.210.63.202:/opt/apache-tomcat-9.0.84/webapps"
+ 
+}
+                }
+            }
+    }//stages end
+}//pipeline end
