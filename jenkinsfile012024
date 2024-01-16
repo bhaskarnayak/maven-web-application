@@ -25,7 +25,7 @@ properties([[$class: 'JobLocalConfiguration', changeReasonComment: ''], pipeline
     stage('deployingwartotomcat'){
         
         sshagent(['c7287eb2-801c-4ee2-bfea-653f7cd9feee']) {
-    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@54.210.63.202:/opt/apache-tomcat-9.0.84/webapps"
+    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@http://54.226.162.80:8080/:/opt/apache-tomcat-9.0.84/webapps"
  
 }
     }
